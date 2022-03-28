@@ -6,6 +6,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,14 +24,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login_activity);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-        NavController navController = navHostFragment.getNavController();;
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // This starts the redis client
         // This code should only be run once when the app starts. If
@@ -38,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
         RedisClient redis = new RedisClient("redis://10.0.2.2:6379");
         redis.start();
 
-
-
-
+        Intent intentLogin = new Intent(MainActivity.this, Login.class);
+        startActivity(intentLogin);
 
     }
 }
