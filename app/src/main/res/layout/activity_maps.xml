@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="350dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="371dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="326dp"
+        android:text="Legend: "
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="114dp"
+        android:layout_marginEnd="212dp"
+        android:layout_marginBottom="-139dp"
+        android:gravity="center"
+        android:text="Your Frequently Visited Locations"
+        android:textColor="@android:color/holo_green_light"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:layout_below="@+id/map"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="202dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="182dp"
+        android:gravity="center"
+        android:text="Suggested Locations to Visit"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="264dp"
+        android:layout_height="73dp"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="243dp"
+        android:layout_marginEnd="79dp"
+        android:layout_marginBottom="65dp"
+        android:text="View AS LIST"
+        android:visibility="visible" />
+
+</RelativeLayout>

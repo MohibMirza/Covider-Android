@@ -51,6 +51,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public boolean isInputEditTextFilled(TextInputEditText textInputEditText, TextInputLayout textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
         if (value.isEmpty()) {
+            textInputLayout.setErrorEnabled(true);
             textInputLayout.setError(message);
             hideKeyboardFrom(textInputEditText);
             return false;
@@ -81,7 +82,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public boolean isInputEditTextMatches(TextInputEditText textInputEditText1, TextInputEditText textInputEditText2, TextInputLayout textInputLayout, String message) {
         String value1 = textInputEditText1.getText().toString().trim();
         String value2 = textInputEditText2.getText().toString().trim();
-        if (!value1.contentEquals(value2)) {
+        if (value1 != value2) {
+            textInputLayout.setErrorEnabled(true);
             textInputLayout.setError(message);
             hideKeyboardFrom(textInputEditText2);
             return false;
@@ -136,7 +138,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String pass = textInputEditTextPassword.getText().toString();
 
         if (u.getPassword() == pass) {
-
+            Intent intentMap = new Intent(Login.this, MapsActivity.class);
+            startActivity(intentMap);
         }
         else {
             // Snack Bar to show success message that record is wrong
