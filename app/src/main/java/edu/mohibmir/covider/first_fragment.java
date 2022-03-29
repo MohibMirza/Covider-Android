@@ -12,6 +12,7 @@ import java.lang.Object.*;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+
+import edu.mohibmir.covider.redis.RClass.Building;
+import edu.mohibmir.covider.redis.RClass.User;
+import edu.mohibmir.covider.redis.RedisDatabase;
 
 public class first_fragment extends Fragment {
 
@@ -76,12 +81,42 @@ public class first_fragment extends Fragment {
                 //set zoom to level to current so that you won't be able to zoom out viz. move outside bounds
                 mMap.setMinZoomPreference(mMap.getCameraPosition().zoom);
 
+                for (String buildingName : RedisDatabase.buildingNames) {
+
+                    Building building = new Building(buildingName);
+                    User user = new User(RedisDatabase.userId);
+
+                    String text = building.getName() + " Instructions: " + building.getInstructions()
+                            + ". Score: "  + building.getRiskScore();
+
+
+                    LatLng latLng = new LatLng(building.getLatitude(), building.getLongitude());
+
+                    int visitedCount = user.getBuildingVisitCount(buildingName);
+
+                    float color = 0.0f;
+
+                    if(visitedCount < 15) {
+                        color = BitmapDescriptorFactory.HUE_RED;
+                    }else if(visitedCount < 55) {
+                        color = BitmapDescriptorFactory.HUE_ORANGE;
+                    }else {
+                        color = BitmapDescriptorFactory.HUE_GREEN;
+                    }
+
+                    mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(text)
+                            .icon(BitmapDescriptorFactory.defaultMarker(color)));
+
+
+                }
+
                 mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(final LatLng latLng) {
-                        mMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .title());
+
+
                     }
                 });
             }

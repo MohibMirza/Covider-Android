@@ -22,9 +22,9 @@ public class Class {
 
         if (redisson == null) { redisson = RedisClient.getInstance().redisson; }
 
-        if(!redisson.getBucket(name + ".isInPerson").isExists()) {
-            redisson.getBucket(name + ".isInPerson").set(true);
-            redisson.getSet(name + ".students");
+        if(!redisson.getBucket(this.name + ".isInPerson").isExists()) {
+            redisson.getBucket(this.name + ".isInPerson").set("true");
+            redisson.getSet(this.name + ".students");
         }
     }
 
@@ -33,7 +33,12 @@ public class Class {
     }
 
     public boolean getInPerson() {
-        return (Boolean) redisson.getBucket(name + ".isInPerson").get();
+        String bool = (String) redisson.getBucket(name + ".isInPerson").get();
+        if(bool.compareTo("true") == 0) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public List<String> getStudents() {
@@ -51,7 +56,11 @@ public class Class {
     }
 
     public void setInPerson(boolean willBeInPerson) {
-        redisson.getBucket(name + ".isInPerson").set(willBeInPerson);
+        if (willBeInPerson == true)
+            redisson.getBucket(name + ".isInPerson").set("true");
+        else
+            redisson.getBucket(name + ".isInPerson").set("false");
+
     }
 
     public void delete() {

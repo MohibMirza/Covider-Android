@@ -1,5 +1,6 @@
 package edu.mohibmir.covider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import edu.mohibmir.covider.redis.RClass.Building;
+import edu.mohibmir.covider.redis.RClass.Status;
+import edu.mohibmir.covider.redis.RClass.User;
+import edu.mohibmir.covider.redis.RedisDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +35,14 @@ public class second_fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView setClassStatus;
+    private RadioButton healthyBtn,sickBtn, covidBtn, remoteBtn, inPersonBtn;
+    private RadioGroup radioGroupSetClass;
+    private Button submitSelfReport, submitCheckIn, submitClassSet;
+    private EditText buildingNameField;
+    private static String userId;
+
 
     public second_fragment() {
         // Required empty public constructor
@@ -59,6 +79,91 @@ public class second_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second_fragment, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_second_fragment, container, false);
+
+        userId = RedisDatabase.userId;
+
+        setClassStatus = view.findViewById(R.id.setClassStatus);
+
+        healthyBtn = view.findViewById(R.id.Healthy);
+        sickBtn = view.findViewById(R.id.Sick);
+        covidBtn = view.findViewById(R.id.Covid);
+        remoteBtn = view.findViewById(R.id.Remote);
+        inPersonBtn = view.findViewById(R.id.inPerson);
+
+        radioGroupSetClass = view.findViewById(R.id.radioGroupSetClass);
+
+        buildingNameField = view.findViewById(R.id.buildingName);
+
+        submitSelfReport = view.findViewById(R.id.btnSubmit);
+        submitCheckIn = view.findViewById(R.id.btnSubmit2);
+        submitClassSet = view.findViewById(R.id.btnSubmit3);
+
+        submitSelfReport.setOnClickListener(view1 -> {
+            boolean healthyClicked = healthyBtn.isChecked();
+            boolean sickClicked = sickBtn.isChecked();
+            boolean covidClicked= covidBtn.isChecked();
+
+            if(!healthyClicked && !sickClicked && !covidClicked) {
+                Toast.makeText(getActivity(),"Please choose a status",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(userId.isEmpty()) {
+                Toast.makeText(getActivity(),"Login Error: Please Restart App",Toast.LENGTH_SHORT).show();
+            }
+
+            User user = new User(userId);
+
+            if(healthyClicked) {
+                user.setCovidStatus(Status.healthy);
+            }else if(sickClicked) {
+                user.setCovidStatus(Status.symptomatic);
+            }else if(covidClicked) {
+                user.setCovidStatus(Status.infected);
+            }
+            Toast.makeText(getActivity(),"Status Updated...",Toast.LENGTH_SHORT).show();
+        });
+
+        submitCheckIn.setOnClickListener(view1 -> {
+            if(userId == null) {
+                Toast.makeText(getActivity(),"Login Error: Please Restart App",Toast.LENGTH_SHORT).show();
+            }
+            String buildingName = buildingNameField.getText().toString().toLowerCase();
+            Toast.makeText(getActivity(), "Registered Visit to " + buildingName + "today.",Toast.LENGTH_SHORT).show();
+            Building building = new Building(buildingName);
+            building.addVisit(userId);
+
+            User user = new User(userId);
+            user.addVisit(buildingName);
+        });
+
+        User user = new User(userId);
+        if(!user.getIsInstructor()) return view;
+
+        setClassStatus.setVisibility(View.VISIBLE);
+
+        radioGroupSetClass.setVisibility(View.VISIBLE);
+        submitClassSet.setVisibility(View.VISIBLE);
+
+        submitClassSet.setOnClickListener(view1 -> {
+            boolean inPersonClicked = inPersonBtn.isChecked();
+            boolean remoteClicked = remoteBtn.isChecked();
+
+            if(!inPersonClicked && !remoteClicked) {
+                Toast.makeText(getActivity(),"Please pick a choice...",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(inPersonClicked) {
+                user.setAllClassesLive();
+            }else{
+                user.setAllClassesRemote();
+            }
+
+        });
+
+        return view;
     }
 }

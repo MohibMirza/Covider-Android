@@ -21,21 +21,22 @@ import static edu.mohibmir.covider.redis.RedisDatabase.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+        NavController navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // This starts the redis client
         // This code should only be run once when the app starts. If
         // you need to access redis use RedisClient.getInstance()
-        RedisClient redis = new RedisClient("redis://10.0.2.2:6379");
-        redis.start();
-
-        Intent intentLogin = new Intent(MainActivity.this, Login.class);
-        startActivity(intentLogin);
-
     }
 }

@@ -15,10 +15,12 @@ import edu.mohibmir.covider.redis.RedisClient;
 public class Building implements Serializable {
 
     private String name;
+    private String buildingId;
 
     private static RedissonClient redisson;
 
     public Building(String name) {
+        buildingId = name;
 
         this.name = "building." + name.toLowerCase();
 
@@ -30,6 +32,7 @@ public class Building implements Serializable {
 
             redisson.getAtomicDouble(this.name + ".latitude").set(0.0);
             redisson.getAtomicDouble(this.name + ".longitude").set(0.0);
+            redisson.getBucket(this.name + ".instructions").set("No special instructions.");
         }
 
     }
@@ -75,7 +78,7 @@ public class Building implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return buildingId;
     }
 
     public double getRiskScore() {
@@ -88,6 +91,14 @@ public class Building implements Serializable {
 
     public void setLatitude(double val) {
         redisson.getAtomicDouble(name + ".latitude").set(val);
+    }
+
+    public void setInstructions(String instr) {
+        redisson.getBucket(this.name + ".instructions").set(instr);
+    }
+
+    public String getInstructions() {
+        return (String) redisson.getBucket(this.name + ".instructions").get();
     }
 
     public boolean checkIfVisitedWithin10Days(String userId) {
@@ -124,6 +135,8 @@ public class Building implements Serializable {
         return false;
     }
 
+
+
     public void delete() {
         redisson.getAtomicDouble(name + ".riskscore").delete();
 
@@ -131,10 +144,11 @@ public class Building implements Serializable {
         redisson.getMap(name + ".lastVisited").delete();
         redisson.getAtomicDouble(name + ".latitude").delete();
         redisson.getAtomicDouble(name + ".longitude").delete();
-
+        redisson.getBucket(name + ".instructions").delete();
     }
 
     private static boolean checkIfExists(String buildingName) {
         return (redisson.getAtomicDouble("building." + buildingName.toLowerCase() + ".riskscore").isExists());
     }
 }
+

@@ -2,15 +2,21 @@ package edu.mohibmir.covider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.widget.NestedScrollView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import edu.mohibmir.covider.redis.RedisClient;
 import edu.mohibmir.covider.redis.RedisDatabase;
 import edu.mohibmir.covider.redis.RClass.User;
 
@@ -19,21 +25,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private NestedScrollView nestedScrollView;
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutPassword;
-    private TextInputEditText textInputEditTextEmail;
-    private TextInputEditText textInputEditTextPassword;
+    private EditText textInputEditTextEmail;
+    private EditText textInputEditTextPassword;
     private Button b;
     private AppCompatTextView textViewLinkRegister;
     private android.content.Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        RedisClient redis = new RedisClient("redis://10.0.2.2:6379");
+        redis.start();
         setContentView(R.layout.login_activity);
         getSupportActionBar().hide();
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
         textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);
-        textInputEditTextEmail = (TextInputEditText) findViewById(R.id.textInputEditTextEmail);
-        textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
+        textInputEditTextEmail = (EditText) findViewById(R.id.textInputEditTextEmail);
+        textInputEditTextPassword = (EditText) findViewById(R.id.textInputEditTextPassword);
         b = (Button) findViewById(R.id.appCompatButtonLogin);
         textViewLinkRegister = (AppCompatTextView) findViewById(R.id.textViewLinkRegister);
         b.setOnClickListener(this);
@@ -48,10 +57,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * @param message
      * @return
      */
-    public boolean isInputEditTextFilled(TextInputEditText textInputEditText, TextInputLayout textInputLayout, String message) {
+    public boolean isInputEditTextFilled(EditText textInputEditText, TextInputLayout textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
         if (value.isEmpty()) {
-            textInputLayout.setErrorEnabled(true);
             textInputLayout.setError(message);
             hideKeyboardFrom(textInputEditText);
             return false;
@@ -68,7 +76,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * @param message
      * @return
      */
-    public boolean isInputEditTextEmail(TextInputEditText textInputEditText, TextInputLayout textInputLayout, String message) {
+    public boolean isInputEditTextEmail(EditText textInputEditText, TextInputLayout textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
         if (value.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
             textInputLayout.setError(message);
@@ -79,11 +87,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
         return true;
     }
-    public boolean isInputEditTextMatches(TextInputEditText textInputEditText1, TextInputEditText textInputEditText2, TextInputLayout textInputLayout, String message) {
+    public boolean isInputEditTextMatches(EditText textInputEditText1, EditText textInputEditText2, TextInputLayout textInputLayout, String message) {
         String value1 = textInputEditText1.getText().toString().trim();
         String value2 = textInputEditText2.getText().toString().trim();
-        if (value1 != value2) {
-            textInputLayout.setErrorEnabled(true);
+        if (!value1.contentEquals(value2)) {
             textInputLayout.setError(message);
             hideKeyboardFrom(textInputEditText2);
             return false;
@@ -124,22 +131,31 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * This method is to validate the input text fields and verify login credentials from SQLite
      */
     private void verifyFromRedis() {
-        if (!isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Enter valid email")) {
-            return;
-        }
-        if (!isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, "Enter valid email")) {
-            return;
-        }
-        if (!isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Enter valid email")) {
-            return;
-        }
+//        if (!isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Enter valid email")) {
+//            return;
+//        }
+//        if (!isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Password is wrong")) {
+//            return;
+//        }
         String id = textInputEditTextEmail.getText().toString();
-        User u = RedisDatabase.getOrCreateUser(id);
+        if(id == null) {
+            Log.d("id:", "ID IS NULL");
+        }
+        User u = new User(id);
         String pass = textInputEditTextPassword.getText().toString();
+        Log.d("Input ID", id);
+        Log.d("Input Password", pass);
 
-        if (u.getPassword() == pass) {
-            Intent intentMap = new Intent(Login.this, MapsActivity.class);
-            startActivity(intentMap);
+        Log.d("Should be password", u.getPassword());
+
+        if (u.getPassword().compareTo(pass) == 0) {
+            Toast.makeText(this,"Successful Login",Toast.LENGTH_SHORT).show();
+
+            RedisDatabase.userId = id.toLowerCase();
+
+            Intent menuIntent = new Intent(this, MainActivity.class);
+            startActivity(menuIntent);
+
         }
         else {
             // Snack Bar to show success message that record is wrong
