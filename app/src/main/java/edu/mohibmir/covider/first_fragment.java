@@ -2,63 +2,93 @@ package edu.mohibmir.covider;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import java.lang.Object.*;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
+import java.lang.Object.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link first_fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class first_fragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public first_fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment first_fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static first_fragment newInstance(String param1, String param2) {
-        first_fragment fragment = new first_fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    MapView mMapView;
+    private GoogleMap googleMap;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_first_fragment, container, false);
+
+        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume(); // needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first_fragment, container, false);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                mMap.getUiSettings().setAllGesturesEnabled(false);
+                //get latlong for corners for specified place
+                LatLng one = new LatLng(34.023595, -118.289880);
+                LatLng two = new LatLng(34.018840, -118.282146);
+
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+                //add them to builder
+                builder.include(one);
+                builder.include(two);
+
+                LatLngBounds bounds = builder.build();
+
+                //get width and height to current display screen
+                int width = getResources().getDisplayMetrics().widthPixels;
+                int height = getResources().getDisplayMetrics().heightPixels;
+
+                // 20% padding
+                int padding = (int) (width * 0.20);
+
+                //set latlong bounds
+                mMap.setLatLngBoundsForCameraTarget(bounds);
+
+                //move camera to fill the bound to screen
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding));
+
+                //set zoom to level to current so that you won't be able to zoom out viz. move outside bounds
+                mMap.setMinZoomPreference(mMap.getCameraPosition().zoom);
+
+                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(final LatLng latLng) {
+                        mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title());
+                    }
+                });
+            }
+        });
+
+
+
+        return rootView;
     }
 }
