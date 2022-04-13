@@ -109,7 +109,12 @@ public class User implements Serializable {
     public int getBuildingVisitCount(String buildingId) {
         buildingId = buildingId.toLowerCase();
         System.out.println(redisson.getMap("SIZE:" + name  + ".visitedBuildingCount").size());
-        return (int) redisson.getMap(name + ".visitedBuildingCount").get(buildingId);
+        RMap<String, Integer> rmap = redisson.getMap(name + ".visitedBuildingCount");
+        if(rmap.containsKey(buildingId)) {
+            return rmap.get(buildingId);
+        }
+        return 0;
+        // return (int) .get(buildingId);
     }
 
     public void setPassword(String password) {
