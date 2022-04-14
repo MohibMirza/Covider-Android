@@ -70,7 +70,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             case R.id.appCompatButtonRegister:
                 Log.d("Test", "11");
                 addToRedis();
-                break;
             case R.id.appCompatTextViewLoginLink:
                 Intent menuIntent = new Intent(this, Login.class);
                 startActivity(menuIntent);
@@ -80,25 +79,24 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
      * This method is to validate the input text fields and post data to SQLite
      */
     private void addToRedis() {
-        if (!lg.isInputEditTextFilled(textInputEditTextFirstName, textInputLayoutFirstName, "Enter First Name")) {
-            Log.d("Test", "1");
+        if (textInputEditTextFirstName.getText().toString().length() == 0) {
+            textInputLayoutFirstName.setError("Enter valid name");
             return;
         }
-        if (!lg.isInputEditTextFilled(textInputEditTextLastName, textInputLayoutLastName, "Enter Last Name")) {
-            Log.d("Test", "2");
+        if (textInputEditTextLastName.getText().toString().length() == 0) {
+            textInputLayoutLastName.setError("Enter valid name");
             return;
         }
-        if (!lg.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Enter Valid Email")) {
-            Log.d("Test", "3");
+        if (textInputEditTextEmail.getText().toString().length() == 0) {
+            textInputLayoutEmail.setError("Enter valid email");
             return;
         }
-        if (!lg.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Enter Password")) {
-            Log.d("Test", "4");
+        if (textInputEditTextPassword.getText().toString().length() == 0) {
+            textInputLayoutPassword.setError("Enter valid password");
             return;
         }
-        if (!lg.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
-                textInputLayoutConfirmPassword, "Passwords don't match")) {
-            Log.d("Test", "5");
+        if (textInputEditTextPassword.getText().toString().compareTo(textInputEditTextConfirmPassword.getText().toString()) != 0) {
+            Snackbar.make(nestedScrollView, "Passwords don't match", Snackbar.LENGTH_LONG).show();
             return;
         }
         Log.d("Test", "Creating User");
