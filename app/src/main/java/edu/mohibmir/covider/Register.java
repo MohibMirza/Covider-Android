@@ -1,4 +1,5 @@
 package edu.mohibmir.covider;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
@@ -6,10 +7,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import androidx.appcompat.widget.AppCompatTextView;
 import android.view.View;
+import android.widget.EditText;
 
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisDatabase;
@@ -22,11 +26,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutPassword;
     private TextInputLayout textInputLayoutConfirmPassword;
-    private TextInputEditText textInputEditTextFirstName;
-    private TextInputEditText textInputEditTextLastName;
-    private TextInputEditText textInputEditTextEmail;
-    private TextInputEditText textInputEditTextPassword;
-    private TextInputEditText textInputEditTextConfirmPassword;
+    private EditText textInputEditTextFirstName;
+    private EditText textInputEditTextLastName;
+    private EditText textInputEditTextEmail;
+    private EditText textInputEditTextPassword;
+    private EditText textInputEditTextConfirmPassword;
     private Button buttonRegister;
     private CheckBox cb;
     private AppCompatTextView appCompatTextViewLoginLink;
@@ -42,11 +46,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
         textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);
         textInputLayoutConfirmPassword = (TextInputLayout) findViewById(R.id.textInputLayoutConfirmPassword);
-        textInputEditTextFirstName = (TextInputEditText) findViewById(R.id.textInputEditTextFirstName);
-        textInputEditTextLastName = (TextInputEditText) findViewById(R.id.textInputEditTextLastName);
-        textInputEditTextEmail = (TextInputEditText) findViewById(R.id.textInputEditTextEmail);
-        textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
-        textInputEditTextConfirmPassword = (TextInputEditText) findViewById(R.id.textInputEditTextConfirmPassword);
+        textInputEditTextFirstName = (EditText) findViewById(R.id.textInputEditTextFirstName);
+        textInputEditTextLastName = (EditText) findViewById(R.id.textInputEditTextLastName);
+        textInputEditTextEmail = (EditText) findViewById(R.id.textInputEditTextEmail);
+        textInputEditTextPassword = (EditText) findViewById(R.id.textInputEditTextPassword);
+        textInputEditTextConfirmPassword = (EditText) findViewById(R.id.textInputEditTextConfirmPassword);
         buttonRegister = (Button) findViewById(R.id.appCompatButtonRegister);
         cb = (CheckBox) findViewById(R.id.checkbox_instructor);
         appCompatTextViewLoginLink = (AppCompatTextView) findViewById(R.id.appCompatTextViewLoginLink);
@@ -61,13 +65,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
      */
     @Override
     public void onClick(View v) {
+        Log.d("Test", "1");
         switch (v.getId()) {
             case R.id.appCompatButtonRegister:
+                Log.d("Test", "11");
                 addToRedis();
                 break;
             case R.id.appCompatTextViewLoginLink:
-                finish();
-                break;
+                Intent menuIntent = new Intent(this, Login.class);
+                startActivity(menuIntent);
         }
     }
     /**
@@ -75,26 +81,30 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
      */
     private void addToRedis() {
         if (!lg.isInputEditTextFilled(textInputEditTextFirstName, textInputLayoutFirstName, "Enter First Name")) {
+            Log.d("Test", "1");
             return;
         }
         if (!lg.isInputEditTextFilled(textInputEditTextLastName, textInputLayoutLastName, "Enter Last Name")) {
+            Log.d("Test", "2");
             return;
         }
         if (!lg.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Enter Valid Email")) {
-            return;
-        }
-        if (!lg.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, "Enter Valid Email")) {
+            Log.d("Test", "3");
             return;
         }
         if (!lg.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Enter Password")) {
+            Log.d("Test", "4");
             return;
         }
         if (!lg.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
                 textInputLayoutConfirmPassword, "Passwords don't match")) {
+            Log.d("Test", "5");
             return;
         }
+        Log.d("Test", "Creating User");
         User u = RedisDatabase.getOrCreateUser(textInputEditTextEmail.getText().toString().trim());
-        if (textInputEditTextPassword.getText().toString().trim() == u.getPassword()) {
+        if (textInputEditTextPassword.getText().toString().trim().compareTo(u.getPassword()) == 0) {
+            Log.d("Test", "email alr exists");
             Snackbar.make(nestedScrollView, "Email already exists", Snackbar.LENGTH_LONG).show();
         }
         else {
@@ -112,6 +122,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             textInputEditTextPassword.setText(null);
             textInputEditTextConfirmPassword.setText(null);
             cb.setChecked(false);
+            Intent menuIntent = new Intent(this, Login.class);
+            startActivity(menuIntent);
         }
     }
 }

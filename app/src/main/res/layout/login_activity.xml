@@ -23,9 +23,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
             android:text = "COVIDER"
-            android:editable="false"
-            android:textSize="30sp"
-            tools:ignore="Deprecated" />
+            android:textSize="30sp"/>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -34,14 +32,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/textInputEditTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 tools:ignore="MissingClass" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,14 +49,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/textInputEditTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
 

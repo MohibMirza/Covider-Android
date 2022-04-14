@@ -2,23 +2,26 @@ package edu.mohibmir.covider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.*;
+import android.util.EventLogTags;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.widget.NestedScrollView;
+
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.regex.Matcher;
+
+import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisClient;
 import edu.mohibmir.covider.redis.RedisDatabase;
-import edu.mohibmir.covider.redis.RClass.User;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = Login.this;
@@ -131,12 +134,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * This method is to validate the input text fields and verify login credentials from SQLite
      */
     private void verifyFromRedis() {
-//        if (!isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, "Enter valid email")) {
-//            return;
-//        }
-//        if (!isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, "Password is wrong")) {
-//            return;
-//        }
         String id = textInputEditTextEmail.getText().toString();
         if(id == null) {
             Log.d("id:", "ID IS NULL");
@@ -148,7 +145,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         Log.d("Should be password", u.getPassword());
 
-        if (u.getPassword().compareTo(pass) == 0) {
+        if (u.getPassword().compareTo(pass) == 0 && u.getPassword().length() > 0) {
             Toast.makeText(this,"Successful Login",Toast.LENGTH_SHORT).show();
 
             RedisDatabase.userId = id.toLowerCase();
