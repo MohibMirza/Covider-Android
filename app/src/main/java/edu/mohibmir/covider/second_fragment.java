@@ -1,6 +1,5 @@
 package edu.mohibmir.covider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.mohibmir.covider.redis.RClass.Building;
-import edu.mohibmir.covider.redis.RClass.Status;
+import edu.mohibmir.covider.redis.RClass.Enums.Status;
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisDatabase;
 

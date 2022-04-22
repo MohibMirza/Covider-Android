@@ -2,30 +2,21 @@ package edu.mohibmir.covider;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import edu.mohibmir.covider.redis.RClass.Building;
 import edu.mohibmir.covider.redis.RClass.Class;
-import edu.mohibmir.covider.redis.RClass.Status;
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisDatabase;
 

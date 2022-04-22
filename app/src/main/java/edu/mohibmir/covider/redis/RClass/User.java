@@ -6,10 +6,12 @@ import org.redisson.api.RedissonClient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.mohibmir.covider.redis.RClass.Enums.Status;
 import edu.mohibmir.covider.redis.RedisClient;
 
 public class User implements Serializable {
@@ -48,6 +50,7 @@ public class User implements Serializable {
 
             // populate it with class names
             redisson.getMap(name + ".visitedBuildingCount");
+            redisson.getList(name + ".notifications");
 
         }
         this.visitedBuildings = new ArrayList<String>();
@@ -115,6 +118,17 @@ public class User implements Serializable {
         }
         return 0;
         // return (int) .get(buildingId);
+    }
+
+    public List<String> getNotifications() {
+        List<String> notifications = new ArrayList<>();
+        Object[] list = redisson.getList(name + ".notifications").toArray();
+        for(Object o : list) {
+            String s = (String) o;
+            notifications.add(s);
+        }
+
+        return notifications;
     }
 
     public void setPassword(String password) {
@@ -203,12 +217,16 @@ public class User implements Serializable {
             }
             redisson.getBucket(name + ".covidStatus").set("symptomatic");
             penalty = 2;
+
+            sendNotification(Status.symptomatic);
         }else if(covidStatus == Status.infected) {
             if(getCovidStatus().compareTo("infected") == 0) {
                 return;
             }
             redisson.getBucket(name + ".covidStatus").set("infected");
             penalty = 5;
+
+            sendNotification(Status.infected);
         }
 
 
@@ -236,9 +254,66 @@ public class User implements Serializable {
                     clas.setInPerson(false);
                 }
             }
-
-
         }
+    }
+
+
+    private void sendNotification(Status status) {
+        Set<String> exposed = new HashSet<>();
+        for(Object obj : redisson.getMap(name + ".visitedBuildingCount").keySet()) {
+            String buildingId = (String) obj;
+            buildingId = buildingId.toLowerCase();
+            Building building = new Building(buildingId);
+            List<String> visitors = building.getAllVisitors();
+            exposed.addAll(visitors);
+        }
+        exposed.remove(this.getUserId().toLowerCase());
+
+        List<String> students = new ArrayList<>();
+        for (String exposee : exposed)
+            students.add(exposee);
+
+        System.out.println("STUDENTS LIST "+ students.toString());
+        System.out.println("CLASSES LIST" + getClassesArray().toString());
+
+        String message1 = "", message2 = "";
+        if(status == Status.infected) {
+            message1 = "You may have been exposed to COVID. Please get checked out.";
+            message2 = userId + " contracted COVID-19.";
+        }else if(status == Status.symptomatic) {
+            message1 = "You may have been exposed to someone who is ill (not comfirmed COVID). Please get checked out.";
+            message2 = userId + " contracted COVID-19.";
+        }
+        Notification notification1 = new Notification(message1, students, new ArrayList<String>());
+        notification1.send();
+        Notification notification2 = new Notification(message2, new ArrayList<String>(), getClassesArray());
+        notification2.send();
+    }
+
+    private List<String> getClassesArray() {
+        List<String> list = new ArrayList<String>();
+
+        String class1 = this.getClass1();
+        String class2 = this.getClass2();
+        String class3 = this.getClass3();
+        String class4 = this.getClass4();
+        String class5 = this.getClass5();
+
+        if(class1.compareTo("") != 0) list.add(class1);
+
+
+        if(class2.compareTo("") != 0) list.add(class2);
+
+        if(class3.compareTo("") != 0) list.add(class3);
+
+
+        if(class4.compareTo("") != 0) list.add(class4);
+
+
+        if(class5.compareTo("") != 0) list.add(class5);
+
+
+        return list;
     }
 
     public void addVisit(String buildingId) {
@@ -263,6 +338,10 @@ public class User implements Serializable {
         visitedBuildingCount.put(buildingId, count+times);
     }
 
+    public void addNotification(String message) {
+        redisson.getList(name + ".notifications").add(message);
+    }
+
     public void delete() {
         redisson.getBucket(name + ".password").delete();
         redisson.getBucket(name + ".firstName").delete();
@@ -279,6 +358,7 @@ public class User implements Serializable {
 
         redisson.getMap(name + ".visitedBuildingCount").clear();
         redisson.getMap(name + ".visitedBuildingCount").delete();
+        redisson.getList(name + ".notifications").delete();
 
     }
 

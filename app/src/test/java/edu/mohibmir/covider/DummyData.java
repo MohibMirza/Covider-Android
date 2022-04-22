@@ -8,7 +8,7 @@ import java.util.Random;
 
 import edu.mohibmir.covider.redis.RClass.Building;
 import edu.mohibmir.covider.redis.RClass.Class;
-import edu.mohibmir.covider.redis.RClass.Status;
+import edu.mohibmir.covider.redis.RClass.Enums.Status;
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisClient;
 import edu.mohibmir.covider.redis.RedisDatabase;
