@@ -1,5 +1,6 @@
 package edu.mohibmir.covider;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -101,7 +102,7 @@ public class DummyData {
     }
     @Test
     public void test() {
-
+        Assert.assertEquals(1, 1);
     }
 
     public static void randomizeVisits(User user) {

@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         RedisClient redis = new RedisClient("redis://10.0.2.2:6379");
         redis.start();
         setContentView(R.layout.login_activity);
-        getSupportActionBar().hide();
+        // getSupportActionBar().hide();
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
         textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);

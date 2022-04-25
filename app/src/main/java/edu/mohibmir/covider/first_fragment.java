@@ -3,6 +3,7 @@ package edu.mohibmir.covider;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +21,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.lang.Object.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 
@@ -38,6 +45,34 @@ public class first_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_first_fragment, container, false);
+
+        // toolbar tingz
+        ImageView leftIcon = rootView.findViewById(R.id.left_icon);
+        ImageView righticon = rootView.findViewById(R.id.right_icon);
+        TextView title = rootView.findViewById(R.id.toolbar_title);
+
+        righticon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("STATE", "TOOLBAR CLICKED");
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.navbarmenu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    switch(menuItem.getItemId()){
+                        case R.id.navbarmenu_buildings:
+                            Log.d("STATE", "NAV BAR BUILDINGS LIST CLICKED");
+                            return true;
+                        case R.id.navbarmenu_settings:
+                            Log.d("STATE", "NAV BAR MENU SETTINGS CLICKED");
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+                popupMenu.show();
+
+            }
+        });
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
