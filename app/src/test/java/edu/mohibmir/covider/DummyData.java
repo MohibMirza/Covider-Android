@@ -1,5 +1,6 @@
 package edu.mohibmir.covider;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 
 import edu.mohibmir.covider.redis.RClass.Building;
 import edu.mohibmir.covider.redis.RClass.Class;
-import edu.mohibmir.covider.redis.RClass.Status;
+import edu.mohibmir.covider.redis.RClass.Enums.Status;
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisClient;
 import edu.mohibmir.covider.redis.RedisDatabase;
@@ -101,7 +102,7 @@ public class DummyData {
     }
     @Test
     public void test() {
-
+        Assert.assertEquals(1, 1);
     }
 
     public static void randomizeVisits(User user) {

@@ -1,20 +1,18 @@
 package edu.mohibmir.covider.redis;
 
-import android.icu.number.NumberFormatter;
-
 import org.redisson.api.RLiveObjectService;
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
 import edu.mohibmir.covider.redis.RClass.Building;
-import edu.mohibmir.covider.redis.RClass.Status;
 import edu.mohibmir.covider.redis.RClass.User;
-import edu.mohibmir.covider.redis.RClass.Visit;
 
 public class RedisDatabase {
 
     public static String userId;
+
+    public static int toggleMarkers = 1;
 
     public static List<String> buildingNames = Arrays.asList(new String[] { "SAL", "SSL", "RTH", "JFF", "HSH" });
 

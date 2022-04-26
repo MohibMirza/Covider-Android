@@ -2,30 +2,26 @@ package edu.mohibmir.covider;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import edu.mohibmir.covider.redis.RClass.Building;
 import edu.mohibmir.covider.redis.RClass.Class;
-import edu.mohibmir.covider.redis.RClass.Status;
 import edu.mohibmir.covider.redis.RClass.User;
 import edu.mohibmir.covider.redis.RedisDatabase;
 
@@ -65,6 +61,43 @@ public class third_fragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_third_fragment, container, false);
+
+
+        ImageView leftIcon = view.findViewById(R.id.left_icon);
+        ImageView righticon = view.findViewById(R.id.right_icon);
+        TextView title = view.findViewById(R.id.toolbar_title);
+
+        righticon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("STATE", "TOOLBAR CLICKED");
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.navbarmenu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    switch(menuItem.getItemId()){
+                        case R.id.navbarmenu_buildings:
+                            Log.d("STATE", "NAV BAR BUILDINGS LIST CLICKED");
+                            return true;
+                        case R.id.navbarmenu_notifications:
+                            Log.d("STATE", "NAV BAR BUILDINGS NOTIFICATIONS CLICKED");
+                            Intent myIntent = new Intent(getActivity(), NotificationActivity.class);
+                            startActivity(myIntent);
+
+
+                            return true;
+                        case R.id.navbarmenu_settings:
+                            Log.d("STATE", "NAV BAR MENU SETTINGS CLICKED");
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+                popupMenu.show();
+
+            }
+        });
+
+
         ListView listView = (ListView) view.findViewById(R.id.listview);
 
         arrayList = new ArrayList<>();

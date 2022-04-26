@@ -11,7 +11,7 @@
     android:paddingRight="20dp"
     android:paddingTop="20dp"
     tools:context=".Login">
-
+    
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"

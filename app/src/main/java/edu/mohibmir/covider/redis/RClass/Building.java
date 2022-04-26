@@ -7,8 +7,11 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import edu.mohibmir.covider.redis.RedisClient;
 
@@ -59,7 +62,15 @@ public class Building implements Serializable {
         return (Double) redisson.getAtomicDouble(name + ".longitude").get();
     }
 
+    public List<String> getAllVisitors() {
+        Set<Object> keys = redisson.getMap(name + ".lastVisited").keySet();
+        List<String> visitors = new ArrayList<>();
+        for(Object o : keys) {
+            visitors.add((String) o);
+        }
 
+        return visitors;
+    }
 
     public void addVisit(String userId) {
         userId = userId.toLowerCase();
