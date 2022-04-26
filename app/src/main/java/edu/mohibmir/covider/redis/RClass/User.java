@@ -328,7 +328,14 @@ public class User implements Serializable {
                 students.add(classMember);
             }
         }
-        return students;
+
+        List<String> classStudents = new ArrayList<>();
+        for(String student : students) {
+            students.add(student);
+        }
+
+        return classStudents;
+
     }
 
     public void addVisit(String buildingId) {
