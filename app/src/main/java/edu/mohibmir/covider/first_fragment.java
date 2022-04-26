@@ -62,6 +62,13 @@ public class first_fragment extends Fragment {
                         case R.id.navbarmenu_buildings:
                             Log.d("STATE", "NAV BAR BUILDINGS LIST CLICKED");
                             return true;
+                        case R.id.navbarmenu_notifications:
+                            Log.d("STATE", "NAV BAR BUILDINGS NOTIFICATIONS CLICKED");
+                            Intent myIntent = new Intent(getActivity(), NotificationActivity.class);
+                            startActivity(myIntent);
+
+
+                            return true;
                         case R.id.navbarmenu_settings:
                             Log.d("STATE", "NAV BAR MENU SETTINGS CLICKED");
                             return true;

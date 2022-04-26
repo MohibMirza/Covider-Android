@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
+    android:paddingTop="32dp"
     >
 
-    <Space
-        android:layout_width="1dp"
-        android:layout_height="70dp"/>
+    <include layout="@layout/toolbar"
+        android:id="@+id/map_toolbar"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,7 +1,9 @@
 package edu.mohibmir.covider.redis.RClass;
 
+import org.redisson.RedissonList;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,7 +124,7 @@ public class User implements Serializable {
 
     public List<String> getNotifications() {
         List<String> notifications = new ArrayList<>();
-        Object[] list = redisson.getList(name + ".notifications").toArray();
+        Object[] list = redisson.getList(name + ".notifications", StringCodec.INSTANCE).toArray();
         for(Object o : list) {
             String s = (String) o;
             notifications.add(s);
@@ -340,6 +342,10 @@ public class User implements Serializable {
 
     public void addNotification(String message) {
         redisson.getList(name + ".notifications").add(message);
+    }
+
+    public void clearNotifications() {
+        redisson.getList(name + ".notifications").clear();
     }
 
     public void delete() {
