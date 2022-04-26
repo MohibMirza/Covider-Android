@@ -318,6 +318,19 @@ public class User implements Serializable {
         return list;
     }
 
+    private List<String> getStudentsOfClasses() {
+        Set<String> students = new HashSet<>();
+        List<String> classes = this.getClassesArray();
+        for(String className : classes) {
+            Class class_ = new Class(className);
+            List<String> classMembers = class_.getStudents();
+            for(String classMember : classMembers) {
+                students.add(classMember);
+            }
+        }
+        return students;
+    }
+
     public void addVisit(String buildingId) {
         buildingId = buildingId.toLowerCase();
         RMap<String, Integer> visitedBuildingCount = redisson.getMap(name + ".visitedBuildingCount");

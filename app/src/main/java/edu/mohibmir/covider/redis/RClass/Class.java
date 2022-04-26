@@ -3,6 +3,7 @@ package edu.mohibmir.covider.redis.RClass;
 import org.redisson.api.RList;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Class {
 
     public List<String> getNotifications() {
         List<String> notifications = new ArrayList<>();
-        Object[] list = redisson.getList(name + ".notifications").toArray();
+        Object[] list = redisson.getList(name + ".notifications", StringCodec.INSTANCE).toArray();
         for(Object o : list) {
             String s = (String) o;
             notifications.add(s);
