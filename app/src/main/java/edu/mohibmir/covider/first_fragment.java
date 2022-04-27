@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.lang.Object.*;
+import java.util.Set;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -136,7 +138,15 @@ public class first_fragment extends Fragment {
 
                     LatLng latLng = new LatLng(building.getLatitude(), building.getLongitude());
 
-                    int visitedCount = user.getBuildingVisitCount(buildingName);
+                    int visitedCount = 0;
+
+                    RedisDatabase.toggleMarkers = 0;
+                    if(RedisDatabase.toggleMarkers == 1) {
+                        visitedCount = user.getBuildingVisitCount(buildingName);
+                    }else{
+                        Set<String> locations = user.getUsersClassLocationSet();
+                        visitedCount = locations.contains(buildingName) ? 60 : 0;
+                    }
 
                     float color = 0.0f;
 

@@ -290,9 +290,17 @@ public class User implements Serializable {
         notification1.send();
         Notification notification2 = new Notification(message2, new ArrayList<String>(), getClassesArray());
         notification2.send();
+
+        if(this.getIsInstructor()) {
+            List<String> teachersStudents = this.getStudentsOfClasses();
+
+            String teacherSickMsg = "Your teacher " + this.getFirstName() + " " + this.getLastName() + " has gotten COVID. Class will be held remotely.";
+            Notification teacherSickNotif = new Notification(teacherSickMsg, teachersStudents, new ArrayList<>());
+            teacherSickNotif.send();
+        }
     }
 
-    private List<String> getClassesArray() {
+    public List<String> getClassesArray() {
         List<String> list = new ArrayList<String>();
 
         String class1 = this.getClass1();
@@ -318,7 +326,19 @@ public class User implements Serializable {
         return list;
     }
 
-    private List<String> getStudentsOfClasses() {
+    public Set<String> getUsersClassLocationSet() {
+        Set<String> locations = new HashSet<>();
+
+        List<String> classes = this.getClassesArray();
+        for(String className : classes) {
+            Class class_ = new Class(className);
+            locations.add(class_.getLocation());
+        }
+
+        return locations;
+    }
+
+    public List<String> getStudentsOfClasses() {
         Set<String> students = new HashSet<>();
         List<String> classes = this.getClassesArray();
         for(String className : classes) {
@@ -328,10 +348,12 @@ public class User implements Serializable {
                 students.add(classMember);
             }
         }
+        students.remove(this.getUserId());
+
 
         List<String> classStudents = new ArrayList<>();
         for(String student : students) {
-            students.add(student);
+            classStudents.add(student);
         }
 
         return classStudents;
@@ -389,4 +411,6 @@ public class User implements Serializable {
     }
 
 }
+
+
 

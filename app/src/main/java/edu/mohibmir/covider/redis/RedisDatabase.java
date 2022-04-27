@@ -12,7 +12,7 @@ public class RedisDatabase {
 
     public static String userId;
 
-    public static int toggleMarkers = 1;
+    public static int toggleMarkers;
 
     public static List<String> buildingNames = Arrays.asList(new String[] { "SAL", "SSL", "RTH", "JFF", "HSH" });
 
