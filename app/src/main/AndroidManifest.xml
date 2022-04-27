@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Covider">
         <activity
+            android:name=".InstructorHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ClassHealthHistory"
+            android:exported="false" />
+        <activity
             android:name=".NotificationActivity"
             android:exported="true"
             android:label="@string/title_activity_notification"
