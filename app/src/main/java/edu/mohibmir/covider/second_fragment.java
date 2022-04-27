@@ -99,6 +99,8 @@ public class second_fragment extends Fragment {
                     switch(menuItem.getItemId()){
                         case R.id.navbarmenu_buildings:
                             Log.d("STATE", "NAV BAR BUILDINGS LIST CLICKED");
+                            Intent in = new Intent(getActivity(), BuildingList.class);
+                            startActivity(in);
                             return true;
                         case R.id.navbarmenu_notifications:
                             Log.d("STATE", "NAV BAR BUILDINGS NOTIFICATIONS CLICKED");

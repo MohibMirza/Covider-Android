@@ -13,7 +13,6 @@
         <entry key="..\:/Users/mohib/Desktop/delete/Covider-Android/app/src/main/res/layout/fragment_third_fragment.xml" value="0.1484375" />
         <entry key="..\:/Users/mohib/Desktop/delete/Covider-Android/app/src/main/res/layout/login_activity.xml" value="0.1484375" />
         <entry key="..\:/Users/mohib/Desktop/delete/Covider-Android/app/src/main/res/layout/register_activity.xml" value="0.1484375" />
-<<<<<<< Updated upstream
         <entry key="..\:/Users/mohib/Desktop/delete/Covider-Android/app/src/main/res/menu/bottom_menu.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/mohib/Desktop/delete/branch-test/Covider-Android/app/src/main/res/drawable/ic_baseline_arrow_drop_down_circle_24.xml" value="0.1" />
         <entry key="..\:/Users/mohib/Desktop/delete/branch-test/Covider-Android/app/src/main/res/drawable/ic_baseline_pest_control_24.xml" value="0.1" />
@@ -28,14 +27,6 @@
         <entry key="..\:/Users/mohib/Desktop/delete/branch-test/Covider-Android/app/src/main/res/layout/notifications_layout.xml" value="0.1" />
         <entry key="..\:/Users/mohib/Desktop/delete/branch-test/Covider-Android/app/src/main/res/layout/toolbar.xml" value="0.1" />
         <entry key="..\:/Users/mohib/Desktop/delete/branch-test/Covider-Android/app/src/main/res/menu/navbarmenu.xml" value="0.5" />
-=======
-        <entry key="app/src/main/res/layout/fragment_first_fragment.xml" value="0.16944444444444445" />
-        <entry key="app/src/main/res/layout/fragment_second_fragment.xml" value="0.1859375" />
-        <entry key="app/src/main/res/layout/fragment_third_fragment.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/login_activity.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/register_activity.xml" value="0.1" />
-        <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.1" />
->>>>>>> Stashed changes
       </map>
     </option>
   </component>
