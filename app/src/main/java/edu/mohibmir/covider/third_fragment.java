@@ -89,7 +89,15 @@ public class third_fragment extends Fragment {
                             return true;
                         case R.id.navbarmenu_settings:
                             Log.d("STATE", "NAV BAR MENU SETTINGS CLICKED");
+                            Intent set = new Intent(getActivity(), Settings.class);
+                            startActivity(set);
                             return true;
+
+                        case R.id.navbarmenu_logout:
+                            Intent logout = new Intent(getActivity(),Login.class);
+                            startActivity(logout);
+                            return true;
+
                         default:
                             return false;
                     }

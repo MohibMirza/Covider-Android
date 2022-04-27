@@ -75,6 +75,13 @@ public class first_fragment extends Fragment {
                             return true;
                         case R.id.navbarmenu_settings:
                             Log.d("STATE", "NAV BAR MENU SETTINGS CLICKED");
+                            Intent set = new Intent(getActivity(), Settings.class);
+                            startActivity(set);
+                            return true;
+
+                        case R.id.navbarmenu_logout:
+                            Intent logout = new Intent(getActivity(),Login.class);
+                            startActivity(logout);
                             return true;
                         default:
                             return false;
@@ -140,7 +147,6 @@ public class first_fragment extends Fragment {
 
                     int visitedCount = 0;
 
-                    RedisDatabase.toggleMarkers = 0;
                     if(RedisDatabase.toggleMarkers == 1) {
                         visitedCount = user.getBuildingVisitCount(buildingName);
                     }else{

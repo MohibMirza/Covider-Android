@@ -39,7 +39,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
-        getSupportActionBar().hide();
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         textInputLayoutFirstName = (TextInputLayout) findViewById(R.id.textInputLayoutFirstName);
         textInputLayoutLastName = (TextInputLayout) findViewById(R.id.textInputLayoutLastName);
@@ -70,6 +69,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             case R.id.appCompatButtonRegister:
                 Log.d("Test", "11");
                 addToRedis();
+                break;
             case R.id.appCompatTextViewLoginLink:
                 Intent menuIntent = new Intent(this, Login.class);
                 startActivity(menuIntent);
