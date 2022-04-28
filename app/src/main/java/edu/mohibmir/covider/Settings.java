@@ -47,11 +47,11 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         u = new User(RedisDatabase.userId);
         textFirstName.setText(u.getFirstName(), TextView.BufferType.EDITABLE);
         textLastName.setText(u.getLastName(), TextView.BufferType.EDITABLE);
-        if (RedisDatabase.toggleMarkers == 0) {
+        if (RedisDatabase.toggleMarkers == 1) {
             ((RadioButton)findViewById(R.id.FV)).setChecked(true);
             ((RadioButton)findViewById(R.id.DS)).setChecked(false);
         }
-        else if (RedisDatabase.toggleMarkers == 1) {
+        else if (RedisDatabase.toggleMarkers == 0) {
             ((RadioButton)findViewById(R.id.FV)).setChecked(false);
             ((RadioButton)findViewById(R.id.DS)).setChecked(true);
         }
@@ -66,13 +66,13 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             case R.id.FV:
                 ((RadioButton)findViewById(R.id.DS)).setChecked(false);
                 ((RadioButton)findViewById(R.id.FV)).setChecked(true);
-                RedisDatabase.toggleMarkers = 0;
+                RedisDatabase.toggleMarkers = 1;
                 break;
 
             case R.id.DS:
                 ((RadioButton)findViewById(R.id.FV)).setChecked(false);
                 ((RadioButton)findViewById(R.id.DS)).setChecked(true);
-                RedisDatabase.toggleMarkers = 1;
+                RedisDatabase.toggleMarkers = 0;
                 break;
         }
     }
