@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,29 @@ import edu.mohibmir.covider.redis.RedisDatabase;
  * create an instance of this fragment.
  */
 public class third_fragment extends Fragment {
+
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return arrayList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            return null;
+        }
+    }
 
     FragmentActivity listener;
     ArrayList<String> arrayList;
@@ -111,8 +137,6 @@ public class third_fragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.listview);
 
         arrayList = new ArrayList<>();
-        arrayList.add("");
-
         User user = new User(RedisDatabase.userId);
 
         if (user.getIsInstructor() == false)
@@ -127,6 +151,25 @@ public class third_fragment extends Fragment {
         ArrayAdapter<String> arrayAdapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
 
         listView.setAdapter(arrayAdapter);
+
+        // Handling click events in listview
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0 && user.getIsInstructor() == true) // instructor was clicked
+                {
+                    startActivity(new Intent(getContext(),InstructorHistory.class));
+                }
+                else if (user.getIsInstructor() == true && position == 2) // class was clicked by instructor
+                {
+                    startActivity(new Intent(getContext(), ClassHealthHistory.class));
+                }
+
+
+            }
+        });
 
 
         return view;
