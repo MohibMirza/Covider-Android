@@ -162,15 +162,38 @@ public class third_fragment extends Fragment {
                 {
                     startActivity(new Intent(getContext(),InstructorHistory.class));
                 }
-                else if (user.getIsInstructor() == true && position == 2) // class was clicked by instructor
+                if (classSelected(position) == true) // class was clicked by instructor
                 {
                     startActivity(new Intent(getContext(), ClassHealthHistory.class));
                 }
 
 
             }
-        });
 
+            public boolean classSelected(int position) {
+                String string = arrayAdapter.getItem(position);
+                String builtString = "";
+                int i = 0;
+                while (string.charAt(i) != ' ')
+                {
+                    builtString = builtString + string.charAt(i);
+                    i++;
+                }
+                User user = new User(RedisDatabase.userId);
+                String class1 = user.getClass1();
+                String class2 = user.getClass2();
+                String class3 = user.getClass3();
+                String class4 = user.getClass4();
+                String class5 = user.getClass5();
+
+                if (builtString.equals(class1)) return true;
+                if (builtString.equals(class2)) return true;
+                if (builtString.equals(class3)) return true;
+                if (builtString.equals(class4)) return true;
+                if (builtString.equals(class5)) return true;
+                return false;
+            }
+        });
 
         return view;
     }
@@ -206,6 +229,7 @@ public class third_fragment extends Fragment {
         arrayList.add("ID: " + user.getUserId());
 
 
+        // Class 1
         String string = user.getClass1();
         Class class1 = new Class(string);
         List<String> studentList = class1.getStudents();
@@ -222,8 +246,81 @@ public class third_fragment extends Fragment {
             }
         }
 
+        // Class 2
+        string = user.getClass2();
+        if (string != "") {
+            arrayList.add("");
+            class1 = new Class(string);
+            studentList = class1.getStudents();
+            if (class1.getInPerson() == true) inperson = " In-Person";
+            else inperson = " Online";
 
+            arrayList.add(class1.getClassName() + inperson);
 
+            for (int i = 0; i < studentList.size(); i++) {
+                User student = new User(studentList.get(i));
+                if (student.getIsInstructor() == false) {
+                    arrayList.add(student.getFirstName() + " " + student.getLastName() + " " + student.getCovidStatus());
+                }
+            }
+        }
+
+        // Class 3
+        string = user.getClass3();
+        if (string != "") {
+            arrayList.add("");
+            class1 = new Class(string);
+            studentList = class1.getStudents();
+            if (class1.getInPerson() == true) inperson = " In-Person";
+            else inperson = " Online";
+
+            arrayList.add(class1.getClassName() + inperson);
+
+            for (int i = 0; i < studentList.size(); i++) {
+                User student = new User(studentList.get(i));
+                if (student.getIsInstructor() == false) {
+                    arrayList.add(student.getFirstName() + " " + student.getLastName() + " " + student.getCovidStatus());
+                }
+            }
+        }
+
+        // Class 4
+        string = user.getClass4();
+        if (string != "") {
+            arrayList.add("");
+            class1 = new Class(string);
+            studentList = class1.getStudents();
+            if (class1.getInPerson() == true) inperson = " In-Person";
+            else inperson = " Online";
+
+            arrayList.add(class1.getClassName() + inperson);
+
+            for (int i = 0; i < studentList.size(); i++) {
+                User student = new User(studentList.get(i));
+                if (student.getIsInstructor() == false) {
+                    arrayList.add(student.getFirstName() + " " + student.getLastName() + " " + student.getCovidStatus());
+                }
+            }
+        }
+
+        // Class 5
+        string = user.getClass5();
+        if (string != "") {
+            arrayList.add("");
+            class1 = new Class(string);
+            studentList = class1.getStudents();
+            if (class1.getInPerson() == true) inperson = " In-Person";
+            else inperson = " Online";
+
+            arrayList.add(class1.getClassName() + inperson);
+
+            for (int i = 0; i < studentList.size(); i++) {
+                User student = new User(studentList.get(i));
+                if (student.getIsInstructor() == false) {
+                    arrayList.add(student.getFirstName() + " " + student.getLastName() + " " + student.getCovidStatus());
+                }
+            }
+        }
 
 
     }
